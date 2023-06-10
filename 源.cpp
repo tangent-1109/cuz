@@ -305,6 +305,24 @@ void addRequiredCoursesToStudents(vector<Student>& students, const vector<Course
         }
     }
 }
+bool isStudentExists(const string& studentName, const vector<Student>& students) {
+    for (const auto& student : students) {
+        if (student.getName() == studentName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool isTeacherExists(const string& teacherName, const vector<Teacher>& teachers) {
+    for (const auto& teacher : teachers) {
+        if (teacher.getName() == teacherName) {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 int main() {
     const string teacherFilename = "teachers.txt";
@@ -355,6 +373,7 @@ int main() {
     }
     //调用函数将必修课添加到学生的选课列表中
     addRequiredCoursesToStudents(students, courses);
+     
     // 主循环
     int option;
     string username, password;
@@ -439,8 +458,7 @@ int main() {
                     cin >> tutoringTime;
                     cout << "请输入课程类型（必修/选修）：";
                     cin >> courseType;
-                    cout << "请输入任课老师：";
-                    cin >> teacher;
+                    teacher = currentTeacher->getName();
 
                     Course* course;
                     if (courseType == "必修") {
@@ -629,17 +647,23 @@ int main() {
                 string studentName, studentPassword;
                 cout << "请输入学生姓名和密码：" << endl;
                 cin >> studentName >> studentPassword;
-                students.push_back(Student(studentName, studentPassword));
+                if (!isStudentExists(studentName,students))
+                {students.push_back(Student(studentName, studentPassword));
                 saveStudents(studentFilename, students);
-                cout << "创建学生账号成功" << endl;
+                cout << "创建学生账号成功" << endl; }
+                else
+                cout << "该学生已存在！" << endl;
             }
             else if (accountType == "教师") {
                 string teacherName, teacherPassword;
                 cout << "请输入教师姓名和密码：" << endl;
                 cin >> teacherName >> teacherPassword;
-                teachers.push_back(Teacher(teacherName, teacherPassword));
-                saveTeachers(teacherFilename, teachers);
-                cout << "创建教师账号成功" << endl;
+                if (!isTeacherExists(teacherName,teachers)) {
+                    teachers.push_back(Teacher(teacherName, teacherPassword));
+                    saveTeachers(teacherFilename, teachers);
+                    cout << "创建教师账号成功" << endl;
+                }
+                else cout << "该教师已存在！" << endl;
             }
             else { cout << "无效的账号类型。" << endl;
             }
