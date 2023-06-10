@@ -40,14 +40,14 @@ public:
         : Course(id, name, time), teacher(teacherName) {}
 
     string getType() const override {
-        return "±ØÐÞ";
+        return "å¿…ä¿®";
     }
 
     void showDetails() const override {
-        cout << "¿Î³ÌÃû£º" << getCourseName() << endl;
-        cout << "¿Î³ÌÀàÐÍ£º" << getType() << endl;
-        cout << "´ðÒÉ¸¨µ¼Ê±¼ä£º" << tutoringTime << endl;
-        cout << "ÈÎ¿ÎÀÏÊ¦£º" << teacher << endl;
+        cout << "è¯¾ç¨‹åï¼š" << getCourseName() << endl;
+        cout << "è¯¾ç¨‹ç±»åž‹ï¼š" << getType() << endl;
+        cout << "ç­”ç–‘è¾…å¯¼æ—¶é—´ï¼š" << tutoringTime << endl;
+        cout << "ä»»è¯¾è€å¸ˆï¼š" << teacher << endl;
     }
 
     string getTeacher() const {
@@ -64,14 +64,14 @@ public:
         : Course(id, name, time), teacher(teacherName) {}
 
     string getType() const override {
-        return "Ñ¡ÐÞ";
+        return "é€‰ä¿®";
     }
 
     void showDetails() const override {
-        cout << "¿Î³ÌÃû£º" << getCourseName() << endl;
-        cout << "¿Î³ÌÀàÐÍ£º" << getType() << endl;
-        cout << "´ðÒÉ¸¨µ¼Ê±¼ä£º" << tutoringTime << endl;
-        cout << "ÈÎ¿ÎÀÏÊ¦£º" << teacher << endl;
+        cout << "è¯¾ç¨‹åï¼š" << getCourseName() << endl;
+        cout << "è¯¾ç¨‹ç±»åž‹ï¼š" << getType() << endl;
+        cout << "ç­”ç–‘è¾…å¯¼æ—¶é—´ï¼š" << tutoringTime << endl;
+        cout << "ä»»è¯¾è€å¸ˆï¼š" << teacher << endl;
     }
 
     string getTeacher() const {
@@ -116,11 +116,11 @@ public:
 
     void searchCourses() const {
         if (courses.empty()) {
-            cout << "Äú»¹Ã»ÓÐÌí¼ÓÈÎºÎ¿Î³Ì£¡" << endl;
+            cout << "æ‚¨è¿˜æ²¡æœ‰æ·»åŠ ä»»ä½•è¯¾ç¨‹ï¼" << endl;
             return;
         }
 
-        cout << "ÄúµÄ¿Î³ÌÁÐ±í£º" << endl;
+        cout << "æ‚¨çš„è¯¾ç¨‹åˆ—è¡¨ï¼š" << endl;
         for (const auto& course : courses) {
             course->showDetails();
             cout << endl;
@@ -130,15 +130,15 @@ public:
     void addTutoringInfo(const string& courseID, const string& info) {
         for (const auto& course : courses) {
             if (course->getCourseID() == courseID) {
-                cout << "ÁôÑÔÒÑÌí¼ÓÖÁ¿Î³Ì£º" << course->getCourseName() << endl;
-                // ÔÚ´Ë´¦Ö´ÐÐÌí¼ÓÁôÑÔµÄ²Ù×÷
+                cout << "ç•™è¨€å·²æ·»åŠ è‡³è¯¾ç¨‹ï¼š" << course->getCourseName() << endl;
+                // åœ¨æ­¤å¤„æ‰§è¡Œæ·»åŠ ç•™è¨€çš„æ“ä½œ
                 ofstream outputFile(courseID + ".txt", ios::app);
                 if (outputFile.is_open()) {
                     outputFile << info << endl;
                     outputFile.close();
                 }
                 else {
-                    cout << "ÎÞ·¨´ò¿ªÁôÑÔÎÄ¼þ£¡" << endl;
+                    cout << "æ— æ³•æ‰“å¼€ç•™è¨€æ–‡ä»¶ï¼" << endl;
                 }
 
                 break;
@@ -182,10 +182,10 @@ public:
 
     void showSelectedCourses() const {
         if (selectedCourses.empty()) {
-            cout << "Äú»¹Ã»ÓÐÑ¡ÔñÈÎºÎ¿Î³Ì£¡" << endl;
+            cout << "æ‚¨è¿˜æ²¡æœ‰é€‰æ‹©ä»»ä½•è¯¾ç¨‹ï¼" << endl;
             return;
         }
-
+        cout << "ä½ çš„è¯¾è¡¨å¦‚ä¸‹" << endl;
         for (const auto& course : selectedCourses) {
             course->showDetails();
             cout << endl;
@@ -195,8 +195,8 @@ public:
     void showTutoringInfo(const string& courseID) const {
         for (const auto& course : selectedCourses) {
             if (course->getCourseID() == courseID) {
-                cout << "¿Î³Ì£º" << course->getCourseName() << " µÄÁôÑÔÐÅÏ¢£º" << endl;
-                // ÔÚ´Ë´¦Ö´ÐÐÏÔÊ¾ÁôÑÔÐÅÏ¢µÄ²Ù×÷
+                cout << "è¯¾ç¨‹ï¼š" << course->getCourseName() << " çš„ç•™è¨€ä¿¡æ¯ï¼š" << endl;
+                // åœ¨æ­¤å¤„æ‰§è¡Œæ˜¾ç¤ºç•™è¨€ä¿¡æ¯çš„æ“ä½œ
                 ifstream inputFile(courseID + ".txt");
                 if (inputFile.is_open()) {
                     string line;
@@ -206,7 +206,7 @@ public:
                     inputFile.close();
                 }
                 else {
-                    cout << "ÎÞ·¨´ò¿ªÁôÑÔÎÄ¼þ£¡" << endl;
+                    cout << "æ— æ³•æ‰“å¼€ç•™è¨€æ–‡ä»¶ï¼" << endl;
                 }
                 break;
             }
@@ -215,15 +215,15 @@ public:
     void addTutoringInfo(const string& courseID, const string& info) {
         for (const auto& course : selectedCourses) {
             if (course->getCourseID() == courseID) {
-                cout << "ÁôÑÔÒÑÌí¼ÓÖÁ¿Î³Ì£º" << course->getCourseName() << endl;
-                // ÔÚ´Ë´¦Ö´ÐÐÌí¼ÓÁôÑÔµÄ²Ù×÷
+                cout << "ç•™è¨€å·²æ·»åŠ è‡³è¯¾ç¨‹ï¼š" << course->getCourseName() << endl;
+                // åœ¨æ­¤å¤„æ‰§è¡Œæ·»åŠ ç•™è¨€çš„æ“ä½œ
                 ofstream outputFile(courseID + ".txt", ios::app);
                 if (outputFile.is_open()) {
                     outputFile << info << endl;
                     outputFile.close();
                 }
                 else {
-                    cout << "ÎÞ·¨´ò¿ªÁôÑÔÎÄ¼þ£¡" << endl;
+                    cout << "æ— æ³•æ‰“å¼€ç•™è¨€æ–‡ä»¶ï¼" << endl;
                 }
 
                 break;
@@ -291,7 +291,7 @@ void saveCourses(const string& filename, const vector<Course*>& courses) {
 }
 void studentAddMessage(Student& student, string courseID) {
     string message;
-    cout << "ÇëÊäÈëÁôÑÔÐÅÏ¢£º";
+    cout << "è¯·è¾“å…¥ç•™è¨€ä¿¡æ¯ï¼š";
     cin >> message;
 
     student.addTutoringInfo(courseID, message);
@@ -314,7 +314,7 @@ int main() {
     vector<Student> students;
     vector<Course*> courses;
 
-    // ´ÓÎÄ¼þ¼ÓÔØ½ÌÊ¦ÐÅÏ¢
+    // ä»Žæ–‡ä»¶åŠ è½½æ•™å¸ˆä¿¡æ¯
     ifstream teacherFile(teacherFilename);
     if (teacherFile.is_open()) {
         Teacher teacher("", "");
@@ -324,7 +324,7 @@ int main() {
         teacherFile.close();
     }
 
-    // ´ÓÎÄ¼þ¼ÓÔØÑ§ÉúÐÅÏ¢
+    // ä»Žæ–‡ä»¶åŠ è½½å­¦ç”Ÿä¿¡æ¯
     ifstream studentFile(studentFilename);
     if (studentFile.is_open()) {
         Student student("", "");
@@ -334,40 +334,40 @@ int main() {
         studentFile.close();
     }
 
-    // ´ÓÎÄ¼þ¼ÓÔØ¿Î³ÌÐÅÏ¢
+    // ä»Žæ–‡ä»¶åŠ è½½è¯¾ç¨‹ä¿¡æ¯
     ifstream courseFile(courseFilename);
     if (courseFile.is_open()) {
         string courseID, courseName, courseType, tutoringTime, teacher;
         while (courseFile >> courseID >> courseName >> courseType >> tutoringTime >> teacher) {
             Course* course;
-            if (courseType == "±ØÐÞ") {
+            if (courseType == "å¿…ä¿®") {
                 course = new BCourse(courseID, courseName, tutoringTime, teacher);
             }
-            else if (courseType == "Ñ¡ÐÞ") {
+            else if (courseType == "é€‰ä¿®") {
                 course = new XCourse(courseID, courseName, tutoringTime, teacher);
             }
             else {
-                continue; // ºöÂÔÎÞÐ§µÄ¿Î³ÌÀàÐÍ
+                continue; // å¿½ç•¥æ— æ•ˆçš„è¯¾ç¨‹ç±»åž‹
             }
             courses.push_back(course);
         }
         courseFile.close();
     }
-    //µ÷ÓÃº¯Êý½«±ØÐÞ¿ÎÌí¼Óµ½Ñ§ÉúµÄÑ¡¿ÎÁÐ±íÖÐ
+    //è°ƒç”¨å‡½æ•°å°†å¿…ä¿®è¯¾æ·»åŠ åˆ°å­¦ç”Ÿçš„é€‰è¯¾åˆ—è¡¨ä¸­
     addRequiredCoursesToStudents(students, courses);
-    // Ö÷Ñ­»·
+    // ä¸»å¾ªçŽ¯
     int option;
     string username, password;
 
     while (true) {
         system("cls");
-        cout << "»¶Ó­Ê¹ÓÃ¿Î³Ì¹ÜÀíÏµÍ³£¡" << endl;
-        cout << "ÇëÑ¡Ôñ²Ù×÷ÀàÐÍ£º" << endl;
-        cout << "1. ½ÌÊ¦µÇÂ¼" << endl;
-        cout << "2. Ñ§ÉúµÇÂ¼" << endl;
-        cout << "3. ´´½¨ÕËºÅ" << endl;
-        cout << "0. ÍË³ö" << endl;
-        cout << "ÇëÑ¡Ôñ²Ù×÷£º";
+        cout << "æ¬¢è¿Žä½¿ç”¨è¯¾ç¨‹ç®¡ç†ç³»ç»Ÿï¼" << endl;
+        cout << "è¯·é€‰æ‹©æ“ä½œç±»åž‹ï¼š" << endl;
+        cout << "1. æ•™å¸ˆç™»å½•" << endl;
+        cout << "2. å­¦ç”Ÿç™»å½•" << endl;
+        cout << "3. åˆ›å»ºè´¦å·" << endl;
+        cout << "0. é€€å‡º" << endl;
+        cout << "è¯·é€‰æ‹©æ“ä½œï¼š";
         cin >> option;
 
         if (option == 0) {
@@ -375,9 +375,9 @@ int main() {
         }
 
         if (option == 1) {
-            cout << "ÇëÊäÈëÓÃ»§Ãû£º";
+            cout << "è¯·è¾“å…¥ç”¨æˆ·åï¼š";
             cin >> username;
-            cout << "ÇëÊäÈëÃÜÂë£º";
+            cout << "è¯·è¾“å…¥å¯†ç ï¼š";
             cin >> password;
             bool isTeacherFound = false;
             Teacher* currentTeacher = nullptr;
@@ -391,21 +391,21 @@ int main() {
             }
 
             if (!isTeacherFound) {
-                cout << "ÓÃ»§Ãû»òÃÜÂë´íÎó£¡" << endl;
+                cout << "ç”¨æˆ·åæˆ–å¯†ç é”™è¯¯ï¼" << endl;
                 system("pause");
                 continue;
             }
 
             while (true) {
                 system("cls");
-                cout << "»¶Ó­£¬½ÌÊ¦ " << currentTeacher->getName() << "£¡" << endl;
-                cout << "ÇëÑ¡Ôñ²Ù×÷£º" << endl;
-                cout << "1. ²é¿´ÎÒµÄ¿Î³Ì" << endl;
-                cout << "2. Ìí¼Ó¿Î³Ì" << endl;
-                cout << "3. É¾³ý¿Î³Ì" << endl;
-                cout << "4. Ìí¼ÓÁôÑÔ" << endl;
-                cout << "0. ·µ»Ø" << endl;
-                cout << "ÇëÑ¡Ôñ²Ù×÷£º";
+                cout << "æ¬¢è¿Žï¼Œæ•™å¸ˆ " << currentTeacher->getName() << "ï¼" << endl;
+                cout << "è¯·é€‰æ‹©æ“ä½œï¼š" << endl;
+                cout << "1. æŸ¥çœ‹æˆ‘çš„è¯¾ç¨‹" << endl;
+                cout << "2. æ·»åŠ è¯¾ç¨‹" << endl;
+                cout << "3. åˆ é™¤è¯¾ç¨‹" << endl;
+                cout << "4. æ·»åŠ ç•™è¨€" << endl;
+                cout << "0. è¿”å›ž" << endl;
+                cout << "è¯·é€‰æ‹©æ“ä½œï¼š";
                 cin >> option;
 
                 if (option == 0) {
@@ -418,9 +418,9 @@ int main() {
                     break;
                 case 2: {
                     string courseID, courseName, tutoringTime, courseType, teacher;
-                    cout << "ÇëÊäÈë¿Î³ÌID£º";
+                    cout << "è¯·è¾“å…¥è¯¾ç¨‹IDï¼š";
                     cin >> courseID;
-                    // ¼ì²é¿Î³ÌIDÊÇ·ñÒÑ´æÔÚ
+                    // æ£€æŸ¥è¯¾ç¨‹IDæ˜¯å¦å·²å­˜åœ¨
                     bool isCourseIDExists = false;
                     for (const auto& course : courses) {
                         if (course->getCourseID() == courseID) {
@@ -430,27 +430,27 @@ int main() {
                     }
 
                     if (isCourseIDExists) {
-                        cout << "¿Î³ÌIDÒÑ´æÔÚ£¡" << endl;
+                        cout << "è¯¾ç¨‹IDå·²å­˜åœ¨ï¼" << endl;
                         break;
                     }
-                    cout << "ÇëÊäÈë¿Î³ÌÃû£º";
+                    cout << "è¯·è¾“å…¥è¯¾ç¨‹åï¼š";
                     cin >> courseName;
-                    cout << "ÇëÊäÈë´ðÒÉ¸¨µ¼Ê±¼ä£º";
+                    cout << "è¯·è¾“å…¥ç­”ç–‘è¾…å¯¼æ—¶é—´ï¼š";
                     cin >> tutoringTime;
-                    cout << "ÇëÊäÈë¿Î³ÌÀàÐÍ£¨±ØÐÞ/Ñ¡ÐÞ£©£º";
+                    cout << "è¯·è¾“å…¥è¯¾ç¨‹ç±»åž‹ï¼ˆå¿…ä¿®/é€‰ä¿®ï¼‰ï¼š";
                     cin >> courseType;
-                    cout << "ÇëÊäÈëÈÎ¿ÎÀÏÊ¦£º";
+                    cout << "è¯·è¾“å…¥ä»»è¯¾è€å¸ˆï¼š";
                     cin >> teacher;
 
                     Course* course;
-                    if (courseType == "±ØÐÞ") {
+                    if (courseType == "å¿…ä¿®") {
                         course = new BCourse(courseID, courseName, tutoringTime, teacher);
                     }
-                    else if (courseType == "Ñ¡ÐÞ") {
+                    else if (courseType == "é€‰ä¿®") {
                         course = new XCourse(courseID, courseName, tutoringTime, teacher);
                     }
                     else {
-                        cout << "ÎÞÐ§µÄ¿Î³ÌÀàÐÍ£¡" << endl;
+                        cout << "æ— æ•ˆçš„è¯¾ç¨‹ç±»åž‹ï¼" << endl;
                         break;
                     }
 
@@ -461,7 +461,7 @@ int main() {
                 }
                 case 3: {
                     string courseID;
-                    cout << "ÇëÊäÈëÒªÉ¾³ýµÄ¿Î³ÌID£º";
+                    cout << "è¯·è¾“å…¥è¦åˆ é™¤çš„è¯¾ç¨‹IDï¼š";
                     cin >> courseID;
 
                     currentTeacher->deleteCourse(courseID);
@@ -470,25 +470,25 @@ int main() {
                 }
                 case 4: {
                     string courseID, message;
-                    cout << "ÇëÊäÈë¿Î³ÌID£º";
+                    cout << "è¯·è¾“å…¥è¯¾ç¨‹IDï¼š";
                     cin >> courseID;
-                    cout << "ÇëÊäÈëÁôÑÔÐÅÏ¢£º";
+                    cout << "è¯·è¾“å…¥ç•™è¨€ä¿¡æ¯ï¼š";
                     cin >> message;
 
                     currentTeacher->addTutoringInfo(courseID, message);
                     break;
                 }
                 default:
-                    cout << "ÎÞÐ§µÄ²Ù×÷£¡" << endl;
+                    cout << "æ— æ•ˆçš„æ“ä½œï¼" << endl;
                     break;
                 }
                 system("pause");
             }
         }
         else if (option == 2) {
-            cout << "ÇëÊäÈëÓÃ»§Ãû£º";
+            cout << "è¯·è¾“å…¥ç”¨æˆ·åï¼š";
             cin >> username;
-            cout << "ÇëÊäÈëÃÜÂë£º";
+            cout << "è¯·è¾“å…¥å¯†ç ï¼š";
             cin >> password;
             bool isStudentFound = false;
             Student* currentStudent = nullptr;
@@ -502,22 +502,22 @@ int main() {
             }
 
             if (!isStudentFound) {
-                cout << "ÓÃ»§Ãû»òÃÜÂë´íÎó£¡" << endl;
+                cout << "ç”¨æˆ·åæˆ–å¯†ç é”™è¯¯ï¼" << endl;
                 system("pause");
                 continue;
             }
             
             while (true) {
                 system("cls");
-                cout << "»¶Ó­£¬Ñ§Éú " << currentStudent->getName() << "£¡" << endl;
-                cout << "ÇëÑ¡Ôñ²Ù×÷£º" << endl;
-                cout << "1. ²é¿´ÒÑÑ¡¿Î³Ì" << endl;
-                cout << "2. ²é¿´±ØÐÞ¿Î³Ì" << endl;
-                cout << "3. Ñ¡Ôñ¿Î³Ì" << endl;
-                cout << "4. ÍËÑ¡¿Î³Ì" << endl;
-                cout << "5. »Ø´ð¿Î³Ì´ðÒÉ" << endl;
-                cout << "0. ·µ»Ø" << endl;
-                cout << "ÇëÑ¡Ôñ²Ù×÷£º";
+                cout << "æ¬¢è¿Žï¼Œå­¦ç”Ÿ " << currentStudent->getName() << "ï¼" << endl;
+                cout << "è¯·é€‰æ‹©æ“ä½œï¼š" << endl;
+                cout << "1. æŸ¥çœ‹å·²é€‰è¯¾ç¨‹" << endl;
+                cout << "2. æŸ¥çœ‹å¿…ä¿®è¯¾ç¨‹" << endl;
+                cout << "3. é€‰æ‹©è¯¾ç¨‹" << endl;
+                cout << "4. é€€é€‰è¯¾ç¨‹" << endl;
+                cout << "5. å›žç­”è¯¾ç¨‹ç­”ç–‘" << endl;
+                cout << "0. è¿”å›ž" << endl;
+                cout << "è¯·é€‰æ‹©æ“ä½œï¼š";
                 cin >> option;
 
                 if (option == 0) {
@@ -529,23 +529,23 @@ int main() {
                     currentStudent->showSelectedCourses();
                     break;
                 case 2: {
-                    // ¶ÁÈ¡¿Î³ÌÎÄ¼þ²¢ÏÔÊ¾±ØÐÞ¿Î³ÌÁÐ±í
+                    // è¯»å–è¯¾ç¨‹æ–‡ä»¶å¹¶æ˜¾ç¤ºå¿…ä¿®è¯¾ç¨‹åˆ—è¡¨
                     ifstream courseFile(courseFilename);
                     if (courseFile.is_open()) {
                         string courseID, courseName, courseType, tutoringTime, teacher;
                         while (courseFile >> courseID >> courseName >> courseType >> tutoringTime >> teacher) {
-                            if (courseType == "±ØÐÞ") {
-                                cout << "¿Î³ÌID£º" << courseID << endl;
-                                cout << "¿Î³ÌÃû£º" << courseName << endl;
-                                cout << "´ðÒÉ¸¨µ¼Ê±¼ä£º" << tutoringTime << endl;
-                                cout << "ÈÎ¿ÎÀÏÊ¦£º" << teacher << endl;
+                            if (courseType == "å¿…ä¿®") {
+                                cout << "è¯¾ç¨‹IDï¼š" << courseID << endl;
+                                cout << "è¯¾ç¨‹åï¼š" << courseName << endl;
+                                cout << "ç­”ç–‘è¾…å¯¼æ—¶é—´ï¼š" << tutoringTime << endl;
+                                cout << "ä»»è¯¾è€å¸ˆï¼š" << teacher << endl;
                                 cout << "---------------------------" << endl;
                             }
                         }
                         courseFile.close();
                     }
                     else {
-                        cout << "ÎÞ·¨´ò¿ª¿Î³ÌÎÄ¼þ£¡" << endl;
+                        cout << "æ— æ³•æ‰“å¼€è¯¾ç¨‹æ–‡ä»¶ï¼" << endl;
                     }
                     
                 }
@@ -555,13 +555,13 @@ int main() {
                     if (courseFile.is_open()) {
                         string courseID, courseName, courseType, tutoringTime, teacher;
                         while (courseFile >> courseID >> courseName >> courseType >> tutoringTime >> teacher) {                           
-                            cout << "¿ÉÑ¡ÐÞÁÐ±íÈçÏÂ"<< endl;
-                            if (courseType == "Ñ¡ÐÞ") {
+                            cout << "å¯é€‰ä¿®åˆ—è¡¨å¦‚ä¸‹"<< endl;
+                            if (courseType == "é€‰ä¿®") {
                                 
-                                cout << "¿Î³ÌID£º" << courseID << endl;
-                                cout << "¿Î³ÌÃû£º" << courseName << endl;
-                                cout << "´ðÒÉ¸¨µ¼Ê±¼ä£º" << tutoringTime << endl;
-                                cout << "ÈÎ¿ÎÀÏÊ¦£º" << teacher << endl;
+                                cout << "è¯¾ç¨‹IDï¼š" << courseID << endl;
+                                cout << "è¯¾ç¨‹åï¼š" << courseName << endl;
+                                cout << "ç­”ç–‘è¾…å¯¼æ—¶é—´ï¼š" << tutoringTime << endl;
+                                cout << "ä»»è¯¾è€å¸ˆï¼š" << teacher << endl;
                                 cout << "---------------------------" << endl;
                             }
                             else {
@@ -572,11 +572,11 @@ int main() {
                         courseFile.close();
                     }
                     else {
-                        cout << "ÎÞ·¨´ò¿ª¿Î³ÌÎÄ¼þ£¡" << endl;                       
+                        cout << "æ— æ³•æ‰“å¼€è¯¾ç¨‹æ–‡ä»¶ï¼" << endl;                       
                     }
 
                     string courseID;
-                    cout << "ÇëÊäÈëÒªÑ¡ÔñµÄ¿Î³ÌID£º";
+                    cout << "è¯·è¾“å…¥è¦é€‰æ‹©çš„è¯¾ç¨‹IDï¼š";
                     cin >> courseID;
 
                     bool isCourseFound = false;
@@ -589,17 +589,17 @@ int main() {
                     }
 
                     if (!isCourseFound) {
-                        cout << "Î´ÕÒµ½Ö¸¶¨µÄ¿Î³Ì£¡" << endl;
+                        cout << "æœªæ‰¾åˆ°æŒ‡å®šçš„è¯¾ç¨‹ï¼" << endl;
                     }
                     else {
-                        cout << "Ñ¡¿Î³É¹¦£¡" << endl;
-                        currentStudent->showSelectedCourses();  // ÏÔÊ¾ÒÑÑ¡¿Î³Ì
+                        cout << "é€‰è¯¾æˆåŠŸï¼" << endl;
+                        currentStudent->showSelectedCourses();  // æ˜¾ç¤ºå·²é€‰è¯¾ç¨‹
                     }
                     break;
                 }
                 case 4: {
                     string courseID;
-                    cout << "ÇëÊäÈëÒªÍËÑ¡µÄ¿Î³ÌID£º";
+                    cout << "è¯·è¾“å…¥è¦é€€é€‰çš„è¯¾ç¨‹IDï¼š";
                     cin >> courseID;
 
                     currentStudent->dropCourse(courseID);
@@ -607,14 +607,14 @@ int main() {
                 }
                 case 5: {
                     string courseID;
-                    cout << "ÇëÊäÈë¿Î³ÌID£º";
+                    cout << "è¯·è¾“å…¥è¯¾ç¨‹IDï¼š";
                     cin >> courseID;
                     currentStudent->showTutoringInfo(courseID);
                     studentAddMessage(*currentStudent, courseID);
                     break;
                 }
                 default:
-                    cout << "ÎÞÐ§µÄ²Ù×÷£¡" << endl;
+                    cout << "æ— æ•ˆçš„æ“ä½œï¼" << endl;
                     break;
                 }
                 system("pause");
@@ -622,40 +622,40 @@ int main() {
         }
         else if (option == 3) {
             string accountType;
-            cout << "ÇëÊäÈëÕËºÅÀàÐÍ£¨Ñ§Éú/½ÌÊ¦£©£º" << endl;
+            cout << "è¯·è¾“å…¥è´¦å·ç±»åž‹ï¼ˆå­¦ç”Ÿ/æ•™å¸ˆï¼‰ï¼š" << endl;
             cin >> accountType;
 
-            if (accountType == "Ñ§Éú") {
+            if (accountType == "å­¦ç”Ÿ") {
                 string studentName, studentPassword;
-                cout << "ÇëÊäÈëÑ§ÉúÐÕÃûºÍÃÜÂë£º" << endl;
+                cout << "è¯·è¾“å…¥å­¦ç”Ÿå§“åå’Œå¯†ç ï¼š" << endl;
                 cin >> studentName >> studentPassword;
                 students.push_back(Student(studentName, studentPassword));
                 saveStudents(studentFilename, students);
-                cout << "´´½¨Ñ§ÉúÕËºÅ³É¹¦" << endl;
+                cout << "åˆ›å»ºå­¦ç”Ÿè´¦å·æˆåŠŸ" << endl;
             }
-            else if (accountType == "½ÌÊ¦") {
+            else if (accountType == "æ•™å¸ˆ") {
                 string teacherName, teacherPassword;
-                cout << "ÇëÊäÈë½ÌÊ¦ÐÕÃûºÍÃÜÂë£º" << endl;
+                cout << "è¯·è¾“å…¥æ•™å¸ˆå§“åå’Œå¯†ç ï¼š" << endl;
                 cin >> teacherName >> teacherPassword;
                 teachers.push_back(Teacher(teacherName, teacherPassword));
                 saveTeachers(teacherFilename, teachers);
-                cout << "´´½¨½ÌÊ¦ÕËºÅ³É¹¦" << endl;
+                cout << "åˆ›å»ºæ•™å¸ˆè´¦å·æˆåŠŸ" << endl;
             }
-            else { cout << "ÎÞÐ§µÄÕËºÅÀàÐÍ¡£" << endl;
+            else { cout << "æ— æ•ˆçš„è´¦å·ç±»åž‹ã€‚" << endl;
             }
             system("pause");
         }
         else {
-            cout << "ÎÞÐ§µÄÉí·Ý£¡" << endl;
+            cout << "æ— æ•ˆçš„èº«ä»½ï¼" << endl;
         }
     }
 
-    // ±£´æ½ÌÊ¦¡¢Ñ§ÉúºÍ¿Î³ÌÐÅÏ¢µ½ÎÄ¼þ
+    // ä¿å­˜æ•™å¸ˆã€å­¦ç”Ÿå’Œè¯¾ç¨‹ä¿¡æ¯åˆ°æ–‡ä»¶
     saveTeachers(teacherFilename, teachers);
     saveStudents(studentFilename, students);
     saveCourses(courseFilename, courses);
 
-    // ÊÍ·Å¶¯Ì¬·ÖÅäµÄÄÚ´æ
+    // é‡Šæ”¾åŠ¨æ€åˆ†é…çš„å†…å­˜
     for (auto& course : courses) {
         delete course;
     }
