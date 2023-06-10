@@ -601,6 +601,15 @@ int main() {
                     for (auto& course : courses) {
                         if (course->getCourseID() == courseID) {
                             currentStudent->selectCourse(course);
+                            ofstream outputFile(studentFilename, ios::app);
+                            if (outputFile) {
+                                outputFile << " " << course->getCourseID();  // 将选课的课程ID追加到学生文件末尾
+                                outputFile.close();
+                            }
+                            else {
+                                cout << "无法打开学生文件！" << endl;
+                            }
+
                             isCourseFound = true;
                             break;
                         }
@@ -611,7 +620,7 @@ int main() {
                     }
                     else {
                         cout << "选课成功！" << endl;
-                        currentStudent->showSelectedCourses();  // 显示已选课程
+                        //currentStudent->showSelectedCourses();  // 显示已选课程
                     }
                     break;
                 }
