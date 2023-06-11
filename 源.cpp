@@ -3,6 +3,8 @@
 #include <string>
 #include <fstream>
 #include<sstream>
+#include <windows.h>
+
 using namespace std;
 
 class Course {
@@ -10,7 +12,7 @@ protected:
     string courseID;
     string courseName;
     string tutoringTime;
-
+    string teacher;
 public:
     Course(const string& id, const string& name, const string& time)
         : courseID(id), courseName(name), tutoringTime(time) {}
@@ -29,17 +31,19 @@ public:
     string getTutoringTime() const {
         return tutoringTime;
     }
-
+    string getTeacher() const {
+        return teacher;
+    }
 };
 
 class BCourse : public Course {
 private:
-   string teacher;
+    string teacher;
 
 public:
     BCourse(const string& id, const string& name, const string& time, const string& teacherName)
         : Course(id, name, time), teacher(teacherName) {}
- 
+
     string getType() const override {
         return "必修";
     }
@@ -118,7 +122,7 @@ public:
             }
         }
         deleteCourseFromFile("courses.txt", courseID);
-     
+
     }
 
 
@@ -130,7 +134,7 @@ public:
         cout << endl;
         cout << "您的课程列表：" << endl;
         cout << "---------------------------------" << endl;
-        for (const auto& course :courses) {
+        for (const auto& course : courses) {
             course->showDetails();
             cout << endl;
         }
@@ -152,8 +156,8 @@ public:
 
                 break;
             }
-            
-                //cout << "无法在此课程下留言！" << endl;
+
+            //cout << "无法在此课程下留言！" << endl;
 
         }
     }
@@ -189,13 +193,13 @@ public:
             return;
         }
 
-       string line;
-       string tempFilename = filename + ".tmp";  // 创建临时文件名
-       ofstream tempFile(tempFilename);  // 打开临时文件进行写入
-       bool deleted = false;  // 标记是否已删除目标行
+        string line;
+        string tempFilename = filename + ".tmp";  // 创建临时文件名
+        ofstream tempFile(tempFilename);  // 打开临时文件进行写入
+        bool deleted = false;  // 标记是否已删除目标行
 
-       while (getline(inputFile, line)) {
-           // 将每行数据拆分为单词
+        while (getline(inputFile, line)) {
+            // 将每行数据拆分为单词
             istringstream iss(line);
             vector<string> words{ istream_iterator<string>(iss), istream_iterator<string>() };
 
@@ -212,20 +216,20 @@ public:
         tempFile.close();
 
         if (deleted) {
-           if (remove(filename.c_str()) != 0) {
-               std::cerr << "无法删除文件：" << filename << endl;
-               return;
-           }
+            if (remove(filename.c_str()) != 0) {
+                std::cerr << "无法删除文件：" << filename << endl;
+                return;
+            }
 
-           if (rename(tempFilename.c_str(), filename.c_str()) != 0) {
+            if (rename(tempFilename.c_str(), filename.c_str()) != 0) {
                 cerr << "无法重命名临时文件：" << tempFilename << endl;
                 return;
             }
 
             cout << "已成功删除课程ID为 " << courseID << " 的行。" << endl;
-      }
-       else {
-           cout << "未找到课程ID为 " << courseID << " 的行。" << endl;
+        }
+        else {
+            cout << "未找到课程ID为 " << courseID << " 的行。" << endl;
         }
     }
 
@@ -289,7 +293,8 @@ public:
             cout << "您还没有选择任何课程！" << endl;
             return;
         }
-        cout << "你的课表如下" << endl;
+        cout << "你的课表如下:" << endl;
+        cout << "---------------------------" << endl;
         for (const auto& course : selectedCourses) {
             course->showDetails();
             cout << endl;
@@ -425,6 +430,49 @@ void addRequiredCoursesToStudents(vector<Student>& students, const vector<Course
         }
     }
 }
+void showAllTutoringInfo() {
+    WIN32_FIND_DATAA findData;
+    HANDLE hFind;
+    const char* directory = ".";  // 目录路径，这里使用当前目录
+
+    cout << "目录下已有的课程文件留言信息：" << endl;
+
+    string searchPath = string(directory) + "\\*";
+
+    hFind = FindFirstFileA(searchPath.c_str(), &findData);
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            string fileName = findData.cFileName;
+            string filePath = string(directory) + "\\" + fileName;
+
+            // 检查文件是否以 ".txt" 扩展名结尾，以过滤出课程文件
+            if (fileName.length() > 4 && fileName.substr(fileName.length() - 4) == ".txt") {
+                ifstream inputFile(filePath);
+                if (inputFile.is_open()) {
+                    cout << "课程文件：" << fileName << endl;
+
+                    string line;
+                    while (getline(inputFile, line)) {
+                        cout << line << endl;
+                    }
+
+                    inputFile.close();
+                }
+                else {
+                    cout << "无法打开文件：" << fileName << endl;
+                }
+
+                cout << endl;
+            }
+        } while (FindNextFileA(hFind, &findData) != 0);
+
+        FindClose(hFind);
+    }
+    else {
+        cout << "无法打开目录：" << directory << endl;
+    }
+}
+
 bool isStudentExists(const string& studentName, const vector<Student>& students) {
     for (const auto& student : students) {
         if (student.getName() == studentName) {
@@ -477,7 +525,9 @@ int main() {
     if (teacherFile.is_open()) {
         Teacher teacher("", "");
         while (teacherFile >> teacher) {
+            teacher.addTeacherCoursesFromFile(courseFilename, teacher.getName());
             teachers.push_back(teacher);
+
         }
         teacherFile.close();
     }
@@ -524,7 +574,7 @@ int main() {
         cout << "请选择操作类型：" << endl;
         cout << "1. 教师登录" << endl;
         cout << "2. 学生登录" << endl;
-        cout << "3. 创建账号" << endl;
+        cout << "3. 管理员登录" << endl;
         cout << "0. 退出" << endl;
         cout << "请选择操作：";
         cin >> option;
@@ -555,7 +605,7 @@ int main() {
                 continue;
             }
             // 在教师登录后，找到当前教师对象 currentTeacher
-            currentTeacher->addTeacherCoursesFromFile(courseFilename, currentTeacher->getName());
+            //currentTeacher->addTeacherCoursesFromFile(courseFilename, currentTeacher->getName());
 
             while (true) {
                 system("cls");
@@ -623,8 +673,16 @@ int main() {
                     string courseID;
                     cout << "请输入要删除的课程ID：";
                     cin >> courseID;
-                    currentTeacher->deleteCourse(courseID);
-                    currentTeacher->searchCourses();
+                    bool isCourseTaughtByTeacher = false;
+                    bool isTeacher = isTeacherForCourse(courseID, currentTeacher->getName());
+                    if (isCourseTaughtByTeacher) {
+                        currentTeacher->deleteCourse(courseID);
+                        currentTeacher->searchCourses();
+                    }
+                    else {
+                        cout << "改课程未创建！" << endl;
+                        bool isCourseTaughtByTeacher = false; break;
+                    }
                     //saveCourses(courseFilename, courses);
                     break;
                 }
@@ -632,11 +690,11 @@ int main() {
                     string courseID, message;
                     cout << "请输入课程ID：";
                     cin >> courseID;
-                    
+
 
                     // 判断是否开课和当前教师是否教授这门课程
                     bool isCourseTaughtByTeacher = false;
-                    
+
                     bool isTeacher = isTeacherForCourse(courseID, currentTeacher->getName());
                     for (auto& course : courses) {
                         if (course->getCourseID() == courseID) {
@@ -646,17 +704,20 @@ int main() {
                     }
 
                     if (isCourseTaughtByTeacher) {
-                        if(isTeacher){
-                        currentTeacher->showTutoringInfo(courseID);
-                        cout << "请输入留言信息：";
-                        cin.ignore(); // 忽略之前的输入缓冲区中的换行符
-                        getline(cin, message);
-                        currentTeacher->addTutoringInfo(courseID, message);
-                        cout << "留言成功！" << endl;}
-                        else{ cout << "该教师不是该课程的任课教师。" << endl; }
+                        if (isTeacher) {
+                            currentTeacher->showTutoringInfo(courseID);
+                            cout << "请输入留言信息：";
+                            cin.ignore(); // 忽略之前的输入缓冲区中的换行符
+                            getline(cin, message);
+                            currentTeacher->addTutoringInfo(courseID, message);
+                            cout << "留言成功！" << endl;
+                        }
+                        else { cout << "您不是该课程的教师，无法留言！" << endl; 
+                        bool isCourseTaughtByTeacher = false; break; }
                     }
                     else {
-                        cout << "您不是该课程的教师，无法留言！" << endl;
+                        cout << "改课程未创建！" << endl;
+                        bool isCourseTaughtByTeacher = false; break;
                     }
 
                     break;
@@ -718,6 +779,7 @@ int main() {
                     ifstream courseFile(courseFilename);
                     if (courseFile.is_open()) {
                         string courseID, courseName, courseType, tutoringTime, teacher;
+                        cout << "---------------------------" << endl;
                         while (courseFile >> courseID >> courseName >> courseType >> tutoringTime >> teacher) {
                             if (courseType == "必修") {
                                 cout << "课程ID：" << courseID << endl;
@@ -740,15 +802,15 @@ int main() {
                     ifstream courseFile(courseFilename);
                     if (courseFile.is_open()) {
                         string courseID, courseName, courseType, tutoringTime, teacher;
-                        cout << "可选修列表如下" << endl;
+                        cout << "可选修列表如下:" << endl;
+                        cout << "---------------------------" << endl;
                         while (courseFile >> courseID >> courseName >> courseType >> tutoringTime >> teacher) {
                             if (courseType == "选修") {
                                 cout << "课程ID：" << courseID << endl;
                                 cout << "课程名：" << courseName << endl;
                                 cout << "答疑辅导时间：" << tutoringTime << endl;
                                 cout << "任课老师：" << teacher << endl;
-                                cout << "---------------------------" << endl;
-                                cout << endl;
+                                cout << "---------------------------" << endl;                             
                             }
                         }
                         courseFile.close();
@@ -804,6 +866,7 @@ int main() {
                     cin >> courseID;
                     if (!currentStudent->isCourseSelected(courseID)) {
                         cout << "您未选修该课程，无法留言！" << endl;
+                        bool isCourseSelected = false;
                         break;
                     }
                     currentStudent->showTutoringInfo(courseID);
@@ -818,38 +881,99 @@ int main() {
             }
         }
         else if (option == 3) {
-            string accountType;
-            cout << "请输入账号类型（学生/教师）：" << endl;
-            cin >> accountType;
+            cout << "请输入用户名：";
+            cin >> username;
+            cout << "请输入密码：";
+            cin >> password;
+            bool isAdministrator = false;
+            if (username == "admin" && password == "shou")
+            {
+                isAdministrator = true;
+            }
+            if (!isAdministrator)
+            {
+                cout << "账号密码错误，非法访问！" << endl;
+                system("pause");
+                continue;
+            }
+            while (true) {
+                system("cls");
+                cout << "欢迎，管理员！" << endl;
+                cout << "请选择操作：" << endl;
+                cout << "1. 查看所有教师课程" << endl;
+                cout << "2. 查看所有课程留言" << endl;
+                cout << "3. 注册账号" << endl;
+                cout << "0. 返回" << endl;
+                cout << "请选择操作：";
+                cin >> option;
+                if (option == 0) break;
+                switch (option) {
+                case 1: {
+                    ifstream courseFile(courseFilename);
+                    if (courseFile.is_open()) {
+                        string courseID, courseName, courseType, tutoringTime, teacher;
+                        cout << "SHOU课程表如下:" << endl;
+                        cout << "---------------------------" << endl;
+                        while (courseFile >> courseID >> courseName >> courseType >> tutoringTime >> teacher) {                           
+                                cout << "任课老师：" << teacher << endl;
+                                cout << "课程ID：" << courseID << endl;
+                                cout << "课程名：" << courseName << endl;
+                                cout << "课程类型：" << courseType << endl;
+                                cout << "答疑辅导时间：" << tutoringTime << endl;                            
+                                cout << "---------------------------" << endl;
+                            
+                        }
+                        courseFile.close();
+                    }
+                    else {
+                        cout << "无法打开课程文件！" << endl;                       
+                    }
+                    system("pause");
+                    break;
+                }
+                case 2:showAllTutoringInfo();
+                    system("pause");
+                    break;
+                case 3: {
+                    string accountType;
+                    cout << "请输入账号类型（学生/教师）：" << endl;
+                    cin >> accountType;
 
-            if (accountType == "学生") {
-                string studentName, studentPassword;
-                cout << "请输入学生姓名和密码：" << endl;
-                cin >> studentName >> studentPassword;
-                if (!isStudentExists(studentName, students))
-                {
-                    students.push_back(Student(studentName, studentPassword));
-                    saveStudents(studentFilename, students);
-                    cout << "创建学生账号成功" << endl;
+                    if (accountType == "学生") {
+                        string studentName, studentPassword;
+                        cout << "请输入学生姓名和密码：" << endl;
+                        cin >> studentName >> studentPassword;
+                        if (!isStudentExists(studentName, students))
+                        {
+                            students.push_back(Student(studentName, studentPassword));
+                            saveStudents(studentFilename, students);
+                            cout << "创建学生账号成功" << endl;
+                        }
+                        else
+                            cout << "该学生已存在！" << endl;
+                    }
+                    else if (accountType == "教师") {
+                        string teacherName, teacherPassword;
+                        cout << "请输入教师姓名和密码：" << endl;
+                        cin >> teacherName >> teacherPassword;
+                        if (!isTeacherExists(teacherName, teachers)) {
+                            teachers.push_back(Teacher(teacherName, teacherPassword));
+                            saveTeachers(teacherFilename, teachers);
+                            cout << "创建教师账号成功" << endl;
+                        }
+                        else cout << "该教师已存在！" << endl;
+                    }
+                    else {
+                        cout << "无效的账号类型。" << endl;
+                    }
+                    system("pause");
+                    break;
                 }
-                else
-                    cout << "该学生已存在！" << endl;
-            }
-            else if (accountType == "教师") {
-                string teacherName, teacherPassword;
-                cout << "请输入教师姓名和密码：" << endl;
-                cin >> teacherName >> teacherPassword;
-                if (!isTeacherExists(teacherName, teachers)) {
-                    teachers.push_back(Teacher(teacherName, teacherPassword));
-                    saveTeachers(teacherFilename, teachers);
-                    cout << "创建教师账号成功" << endl;
+                default:
+                    cout << "无效选择！" << endl;
+                    break;
                 }
-                else cout << "该教师已存在！" << endl;
             }
-            else {
-                cout << "无效的账号类型。" << endl;
-            }
-            system("pause");
         }
         else {
             cout << "无效的身份！" << endl;
