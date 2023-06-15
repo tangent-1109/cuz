@@ -14,6 +14,7 @@ protected:
     string tutoringTime;
     string teacher;
 public:
+
     Course(const string& id, const string& name, const string& time)
         : courseID(id), courseName(name), tutoringTime(time) {}
 
@@ -283,6 +284,7 @@ public:
         for (auto it = selectedCourses.begin(); it != selectedCourses.end(); ++it) {
             if ((*it)->getCourseID() == courseID) {
                 selectedCourses.erase(it);
+                cout << "退课成功" << endl;
                 break;
             }
         }
@@ -446,7 +448,7 @@ void showAllTutoringInfo() {
             string filePath = string(directory) + "\\" + fileName;
 
             // 检查文件是否以 ".txt" 扩展名结尾，以过滤出课程文件
-            if (fileName.length() > 4 && fileName.substr(fileName.length() - 4) == ".txt") {
+            if (fileName.length() > 4 && fileName.substr(fileName.length() - 4) == ".txt" && fileName != "students.txt" && fileName != "courses.txt" && fileName != "teachers.txt") {
                 ifstream inputFile(filePath);
                 if (inputFile.is_open()) {
                     cout << "课程文件：" << fileName << endl;
@@ -672,16 +674,15 @@ int main() {
                 case 3: {
                     string courseID;
                     cout << "请输入要删除的课程ID：";
-                    cin >> courseID;
-                    bool isCourseTaughtByTeacher = false;
+                    cin >> courseID;      
                     bool isTeacher = isTeacherForCourse(courseID, currentTeacher->getName());
-                    if (isCourseTaughtByTeacher) {
+                    if (isTeacher) {
                         currentTeacher->deleteCourse(courseID);
                         currentTeacher->searchCourses();
                     }
                     else {
                         cout << "改课程未创建！" << endl;
-                        bool isCourseTaughtByTeacher = false; break;
+                        break;
                     }
                     //saveCourses(courseFilename, courses);
                     break;
